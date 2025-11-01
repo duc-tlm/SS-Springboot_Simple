@@ -1,0 +1,76 @@
+openapi: 3.0.1
+info:
+  title: Permission Role API
+  version: v1
+paths:
+  /api/v1/permissionrole/list:
+    post:
+      summary: Get list of permission roles
+      description: Returns a list of permission roles filtered by role code.
+      operationId: listRoles
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleRequestDTO'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseListRole'
+        '400':
+          description: Invalid request
+        '500':
+          description: Internal server error
+components:
+  schemas:
+    RoleRequestDTO:
+      type: object
+      properties:
+        roleCode:
+          type: string
+          example: "ADMIN"
+      required:
+        - roleCode
+
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          example: "200"
+        message:
+          type: string
+          example: "Fetched permission roles successfully"
+        data:
+          nullable: true
+          description: Generic data field
+
+    # Example of ApiResponse<List<RoleResponseDTO>>
+    ApiResponseListRole:
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/RoleResponseDTO'
+
+    RoleResponseDTO:
+      type: object
+      properties:
+        roleCode:
+          type: string
+          example: "ADMIN"
+        roleName:
+          type: string
+          example: "Administrator"
+        permissions:
+          type: array
+          items:
+            type: string
+            example: "READ_USER"

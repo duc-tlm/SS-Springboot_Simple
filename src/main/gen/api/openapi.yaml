@@ -1,0 +1,100 @@
+openapi: 3.0.1
+info:
+  title: Permission Role API
+  version: v1
+servers:
+- url: /
+paths:
+  /api/v1/permissionrole/list:
+    post:
+      description: Returns a list of permission roles filtered by role code.
+      operationId: listRoles
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleRequestDTO'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseListRole'
+          description: Successful operation
+        "400":
+          description: Invalid request
+        "500":
+          description: Internal server error
+      summary: Get list of permission roles
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+components:
+  schemas:
+    RoleRequestDTO:
+      example:
+        roleCode: ADMIN
+      properties:
+        roleCode:
+          example: ADMIN
+          type: string
+      required:
+      - roleCode
+      type: object
+    ApiResponse:
+      properties:
+        code:
+          example: "200"
+          type: string
+        message:
+          example: Fetched permission roles successfully
+          type: string
+        data:
+          description: Generic data field
+          nullable: true
+      type: object
+    ApiResponseListRole:
+      allOf:
+      - $ref: '#/components/schemas/ApiResponse'
+      - properties:
+          data:
+            items:
+              $ref: '#/components/schemas/RoleResponseDTO'
+            type: array
+        type: object
+      example:
+        code: "200"
+        data:
+        - permissions:
+          - READ_USER
+          - READ_USER
+          roleCode: ADMIN
+          roleName: Administrator
+        - permissions:
+          - READ_USER
+          - READ_USER
+          roleCode: ADMIN
+          roleName: Administrator
+        message: Fetched permission roles successfully
+    RoleResponseDTO:
+      example:
+        permissions:
+        - READ_USER
+        - READ_USER
+        roleCode: ADMIN
+        roleName: Administrator
+      properties:
+        roleCode:
+          example: ADMIN
+          type: string
+        roleName:
+          example: Administrator
+          type: string
+        permissions:
+          items:
+            example: READ_USER
+            type: string
+          type: array
+      type: object
+

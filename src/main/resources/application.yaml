@@ -1,0 +1,22 @@
+#spring.application.name=jpa.problem
+#server.port=8082
+#
+##spring.datasource.url=jdbc:postgres://localhost:5432/oauth2
+#spring.datasource.url=jdbc:postgresql://localhost:5432/oauth2
+#spring.datasource.username=postgres
+#spring.datasource.pass=sumo6842
+
+
+spring:
+  application:
+    name: jpa.problem
+  datasource:
+    url: jdbc:postgresql://localhost:5432/oauth2
+    username: postgres
+    password: sumo6842
+server:
+  port: 8082
+
+springdoc:
+  swagger-ui:
+    path: /swagger/index.html
