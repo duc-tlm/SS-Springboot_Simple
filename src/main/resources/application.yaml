@@ -14,9 +14,15 @@ spring:
     url: jdbc:postgresql://localhost:5432/oauth2
     username: postgres
     password: sumo6842
+    driver-class-name: org.postgresql.Driver
+
+
 server:
   port: 8082
 
 springdoc:
   swagger-ui:
     path: /swagger/index.html
+
+
+
