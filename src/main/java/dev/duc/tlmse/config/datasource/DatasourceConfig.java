@@ -2,10 +2,13 @@ package dev.duc.tlmse.config.datasource;
 
 import jakarta.persistence.EntityManagerFactory;
 import org.hibernate.dialect.PostgreSQLDialect;
+import org.hibernate.mapping.Property;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -13,6 +16,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * JPA DataSource Configuration.
@@ -38,6 +42,7 @@ import java.util.HashMap;
  */
 
 @Configuration
+@EnableJpaRepositories(basePackages = "dev.duc.tlmse.database.repository")
 public class DatasourceConfig {
 
 //    this way to configuration by get value from application.yaml
@@ -62,26 +67,29 @@ public class DatasourceConfig {
     }
 
     @Bean
-    public EntityManagerFactory getEntityManagerFactory() {
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
         factoryBean.setDataSource(dataSource());
         factoryBean.setPackagesToScan("dev.duc.tlmse.database.entity");
 
-        factoryBean.setJpaPropertyMap(new HashMap<>() {{
-            put("datasource.jpa.hibernate.ddl", "validate");
-            put("datasource.jpa.hibernate.show-sql", "true");
-            put("datasource.jpa.hibernate.format-sql", "true");
-            put("spring.data.jbdc.dialect", "postgresq");
-        }});
-
         factoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-        return factoryBean.getObject();
+
+        Map<String, Object> jpaProperties = new HashMap<>();
+
+        jpaProperties.put("hibernate.show-sql", true);
+        jpaProperties.put("hibernate.format-sql", true);
+        jpaProperties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
+
+//        new Property(jpaProperties);
+        factoryBean.setJpaPropertyMap(jpaProperties);
+
+        return factoryBean;
     }
 
     @Bean
-    public JpaTransactionManager getTransactionManager() {
+    public JpaTransactionManager getTransactionManager(EntityManagerFactory emf) {
        JpaTransactionManager transactionManager = new JpaTransactionManager();
-       transactionManager.setEntityManagerFactory(getEntityManagerFactory());
+       transactionManager.setEntityManagerFactory(emf);
        return transactionManager;
     }
 

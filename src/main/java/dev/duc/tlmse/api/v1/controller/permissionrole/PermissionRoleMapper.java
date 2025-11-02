@@ -11,20 +11,20 @@ import org.mapstruct.Mappings;
 
 @Mapper(componentModel = "spring")
 public interface PermissionRoleMapper {
-
-    @Mappings({
-            @Mapping(source = "", target = "")
-    })
-    PermissionRoleRequest toDto(PermissionRoleEntity entity);
-
-    @Mappings({
-            @Mapping(source = "", target = "")
-    })
-    PermissionRoleEntity toEntity(PermissionRoleRequest dto);
-
-    @Mappings({
-            @Mapping(source = "", target = "")
-    })
-    PermissionRoleResponse toDTOByProjection(PermissionRoleProjection projection);
+//
+//    @Mappings({
+//            @Mapping(source = "", target = "")
+//    })
+//    PermissionRoleRequest toDto(PermissionRoleEntity entity);
+//
+//    @Mappings({
+//            @Mapping(source = "", target = "")
+//    })
+//    PermissionRoleEntity toEntity(PermissionRoleRequest dto);
+//
+//    @Mappings({
+//            @Mapping(source = "", target = "")
+//    })
+//    PermissionRoleResponse toDTOByProjection(PermissionRoleProjection projection);
 
 }
