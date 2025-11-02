@@ -3,7 +3,9 @@ package dev.duc.tlmse.config.datasource;
 import jakarta.persistence.EntityManagerFactory;
 import org.hibernate.dialect.PostgreSQLDialect;
 import org.hibernate.mapping.Property;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,22 +47,16 @@ import java.util.Properties;
 
 @Configuration
 @EnableJpaRepositories(basePackages = "dev.duc.tlmse.database.repository")
+@ConfigurationPropertiesScan
 public class DatasourceConfig {
-
-//    this way to configuration by get value from application.yaml
-//    @Bean
-//    @ConfigurationProperties("spring.datasource")
-//    public DataSource getDataSource() {
-//        return DataSourceBuilder.create().build();
-//    }
 
     /**
      * Manual config datasource, other way get config from applicaiton.yaml
      *
      * @return
      */
-    @Bean
-    public DataSource dataSource() {
+    @Bean("readDB")
+    public DataSource readDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
         dataSource.setUrl("jdbc:postgresql://localhost:5432/oauth2");
@@ -69,10 +65,44 @@ public class DatasourceConfig {
         return dataSource;
     }
 
+    @Bean("writeDB")
+    public DataSource writeDataSource() {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName("org.postgresql.Driver");
+        dataSource.setUrl("jdbc:postgresql://localhost:5432/oauth2");
+        dataSource.setUsername("postgres");
+        dataSource.setPassword("sumo6842");
+        return dataSource;
+    }
+
+    @Bean("routingDataSource")
+    @DependsOn(value = {"writeDB", "readDB"})
+    public DataSource routingDataSource(
+            @Qualifier("writeDB") DataSource writeDatasource,
+            @Qualifier("readDB") DataSource readDatasource) {
+        RoutingDatasourceImpl routingDatasource = new RoutingDatasourceImpl();
+
+        Map<Object, Object> datasourceMap = new HashMap<>() {{
+            put(DatasourceType.WRITE_DB, writeDatasource);
+            put(DatasourceType.READ_DB, readDatasource);
+        }};
+
+        routingDatasource.setTargetDataSources(datasourceMap);
+        routingDatasource.setDefaultTargetDataSource(writeDatasource);
+        return routingDatasource;
+    }
+
+    /**
+     * LocalContainerEntityManager -> EntityManagerFactory
+     * @param routingDataSource
+     * @return
+     */
     @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+    @DependsOn("routingDataSource")
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(
+            @Qualifier("routingDataSource") DataSource routingDataSource) {
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
-        factoryBean.setDataSource(dataSource());
+        factoryBean.setDataSource(routingDataSource);
         factoryBean.setPackagesToScan("dev.duc.tlmse.database.entity");
 
         factoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
@@ -89,7 +119,7 @@ public class DatasourceConfig {
 
     }
 
-    @Bean
+    @Bean("transactionManager")
     public TransactionManager getTransactionManager(EntityManagerFactory emf) {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(emf);

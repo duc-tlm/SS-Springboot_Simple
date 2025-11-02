@@ -6,15 +6,15 @@
 #spring.datasource.username=postgres
 #spring.datasource.pass=sumo6842
 
-
-spring:
-  application:
-    name: jpa.problem
-  datasource:
-    url: jdbc:postgresql://localhost:5432/oauth2
-    username: postgres
-    password: sumo6842
-    driver-class-name: org.postgresql.Driver
+#
+#spring:
+#  application:
+#    name: jpa.problem
+#  datasource:
+#    url: jdbc:postgresql://localhost:5432/oauth2
+#    username: postgres
+#    password: sumo6842
+#    driver-class-name: org.postgresql.Driver
 
 
 server:
@@ -25,3 +25,8 @@ springdoc:
     path: /swagger/index.html
 
 
+spring:
+  datasource:
+    username: postgres
+    password: sumo6842
+    url: jdbc:postgres://localhost:5432/oath2
