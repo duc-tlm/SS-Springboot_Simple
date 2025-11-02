@@ -7,7 +7,7 @@ import jakarta.persistence.Table;
 import java.util.UUID;
 
 @Entity
-@Table(name = "module")
+@Table(name = "modules")
 public class ModuleEntity {
 
     @Id

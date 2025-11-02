@@ -17,10 +17,14 @@ public class PermissionRoleEntity {
     @Id
     private UUID id;
 
-
+    @Column(name = "roles_id")
     private UUID roleId;
 
-    private UUID serviceId;
+    @Column(name = "module_code")
+    private UUID moduleCode;
+
+    @Column(name = "service_code", length = 50)
+    private String serviceCode;
 
     @Type(JsonType.class)
     @Column(columnDefinition = "jsonb")

@@ -13,10 +13,12 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.TransactionManager;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * JPA DataSource Configuration.
@@ -54,6 +56,7 @@ public class DatasourceConfig {
 
     /**
      * Manual config datasource, other way get config from applicaiton.yaml
+     *
      * @return
      */
     @Bean
@@ -76,21 +79,21 @@ public class DatasourceConfig {
 
         Map<String, Object> jpaProperties = new HashMap<>();
 
-        jpaProperties.put("hibernate.show-sql", true);
-        jpaProperties.put("hibernate.format-sql", true);
+        jpaProperties.put("hibernate.show_sql", true);
+        jpaProperties.put("hibernate.format_sql", true);
         jpaProperties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
-
-//        new Property(jpaProperties);
+        jpaProperties.put("hibernate.hbm2ddl.auto", "validate");
         factoryBean.setJpaPropertyMap(jpaProperties);
-
+        factoryBean.setJpaPropertyMap(jpaProperties);
         return factoryBean;
+
     }
 
     @Bean
-    public JpaTransactionManager getTransactionManager(EntityManagerFactory emf) {
-       JpaTransactionManager transactionManager = new JpaTransactionManager();
-       transactionManager.setEntityManagerFactory(emf);
-       return transactionManager;
+    public TransactionManager getTransactionManager(EntityManagerFactory emf) {
+        JpaTransactionManager transactionManager = new JpaTransactionManager();
+        transactionManager.setEntityManagerFactory(emf);
+        return transactionManager;
     }
 
 }
