@@ -4,29 +4,42 @@ info:
   version: v1
 paths:
   /api/v1/permissionrole/list:
-    post:
-      summary: Get list of permission roles
-      description: Returns a list of permission roles filtered by role code.
-      operationId: listRoles
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RoleRequestDTO'
+    get:
+      summary: Get permissions by role
+      description: Returns permission modules and their flags for a given role
+      operationId: getPermissionsByRole
+      parameters:
+        - name: role
+          in: query
+          description: Role name to fetch permissions for
+          required: true
+          schema:
+            type: string
       responses:
         '200':
-          description: Successful operation
+          description: Successful response with permissions
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiResponseListRole'
-        '400':
-          description: Invalid request
-        '500':
-          description: Internal server error
+                $ref: '#/components/schemas/PermissionRoleResultDTO'
 components:
   schemas:
+
+    PermissionRoleResultDTO:
+      type: object
+      properties:
+        module:
+          type: string
+          description: Name of the module
+          example: "USER_MANAGEMENT"
+        permission:
+          type: object
+          description: Map of permission key → boolean flag
+          additionalProperties:
+            type: boolean
+          example:
+            CREATE: true
+            DELETE: false
     RoleRequestDTO:
       type: object
       properties:

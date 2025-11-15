@@ -1,12 +1,8 @@
 package dev.duc.tlmse.config.datasource;
 
 import jakarta.persistence.EntityManagerFactory;
-import org.hibernate.dialect.PostgreSQLDialect;
-import org.hibernate.mapping.Property;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
-import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -20,7 +16,6 @@ import org.springframework.transaction.TransactionManager;
 import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 /**
  * JPA DataSource Configuration.
@@ -112,7 +107,7 @@ public class DatasourceConfig {
         jpaProperties.put("hibernate.show_sql", true);
         jpaProperties.put("hibernate.format_sql", true);
         jpaProperties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
-        jpaProperties.put("hibernate.hbm2ddl.auto", "validate");
+        jpaProperties.put("hibernate.hbm2ddl.auto", "update");
         factoryBean.setJpaPropertyMap(jpaProperties);
         factoryBean.setJpaPropertyMap(jpaProperties);
         return factoryBean;

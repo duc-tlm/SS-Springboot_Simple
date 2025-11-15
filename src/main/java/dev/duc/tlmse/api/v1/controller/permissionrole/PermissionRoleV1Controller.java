@@ -2,14 +2,14 @@ package dev.duc.tlmse.api.v1.controller.permissionrole;
 
 
 import dev.duc.tlmse.api.v1.controller.common.ApiResponse;
+import dev.duc.tlmse.domain.rolepermission.PermissionRole;
+import dev.duc.tlmse.domain.rolepermission.PermissionRoleMapper;
 import dev.duc.tlmse.domain.rolepermission.PermissionRoleResultDTO;
 import dev.duc.tlmse.domain.rolepermission.PermissionRoleUseCase;
-import dev.duc.tlmse.domain.rolepermission.RoleRequestDTO;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -20,12 +20,15 @@ import java.util.List;
 public class PermissionRoleV1Controller {
 
     private final PermissionRoleUseCase permissionRoleUseCase;
+    private final PermissionRoleMapper permissionRoleMapper;
 
     @GetMapping("/list")
-    public ApiResponse<?> listRoles(@RequestBody @Valid RoleRequestDTO requestDTO) {
+    public ApiResponse<?> permissions(@RequestParam("role") String roleName) {
 
-        List<PermissionRoleResultDTO> res = permissionRoleUseCase.getDataFromRoleCode(requestDTO);
-        return ApiResponse.success("Success with data",res);
+        List<PermissionRole> res = permissionRoleUseCase.getDataFromRoleCode(roleName);
+        List<PermissionRoleResultDTO> responses = this.permissionRoleMapper.toResponses(res);
+
+        return ApiResponse.success("Success with data",responses);
     }
 
 

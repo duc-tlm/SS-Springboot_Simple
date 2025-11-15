@@ -1,7 +1,24 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url = uri("https://packages.confluent.io/maven/")
+        }
+        maven {
+            url = uri("https://plugins.gradle.org/m2/")
+        }
+    }
+}
+
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.5.7'
-	id 'io.spring.dependency-management' version '1.1.7'
+    id 'java'
+//    id "com.google.protobuf" version "0.8.19"
+    id("io.spring.dependency-management") version "1.1.0"
+    id 'org.springframework.boot' version '3.3.1'
+    id "com.github.davidmc24.gradle.plugin.avro" version "1.2.0"
+//    id "com.github.imflog.kafka-schema-registry-gradle-plugin" version "1.6.0"
+//    id "com.github.davidmc24.gradle.plugin.avro" version "1.3.0"
+
 }
 
 group = 'com.example'
@@ -9,32 +26,71 @@ version = '0.0.1-SNAPSHOT'
 description = 'Demo project for Spring Boot'
 
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(23)
-	}
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(23)
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
+
+    maven {
+//        url = uri("https://jitpack.io")
+        url "https://packages.confluent.io/maven"
+    }
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.13")
-	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
-	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
+//    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8")
+    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
+    // https://mvnrepository.com/artifact/org.projectlombok/lombok
+    implementation("org.projectlombok:lombok:1.18.42")
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
 
-	implementation 'com.vladmihalcea:hibernate-types-60:2.21.1' // for Hibernate 6
-	runtimeOnly 'org.postgresql:postgresql'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+//    implementation 'com.vladmihalcea:hibernate-types-60:2.21.1' // for Hibernate 6
+    runtimeOnly 'org.postgresql:postgresql'
+
+    // https://mvnrepository.com/artifact/io.confluent/kafka-schema-registry-client
+//    implementation("io.confluent:kafka-schema-registry-client:7.9.0")
+    implementation 'org.apache.avro:avro:1.10.2'
+    implementation "io.confluent:kafka-avro-serializer:6.1.0"
+//    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+//    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
 }
+
+
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
+
+
+//schemaRegistry {
+//    // URL of your Schema Registry
+//    url = 'http://localhost:8081'
+//
+//    // optional: authentication (if needed)
+//    // credentials {
+//    //     username = 'user'
+//    //     password = 'pass'
+//    // }
+//
+//    // Register schemas
+//    register {
+//        subject('avro-adventures-value', 'src/main/avro/adventures.avsc', 'AVRO')
+////		subject('heroes-key', 'src/main/avro/hero-key.avsc', 'AVRO')
+//    }
+//
+//    // optional: define compatibility checks
+//    compatibility {
+//        subject('avro-adventures-value', 'src/main/avro/adventures.avsc', 'AVRO')
+//    }
+//}
