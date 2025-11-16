@@ -1,4 +1,4 @@
-package dev.duc.tlmse.database.entity;
+package dev.duc.tlmse.repository.database.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;

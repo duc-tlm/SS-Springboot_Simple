@@ -1,10 +1,9 @@
 package dev.duc.tlmse.domain.rolepermission;
 
-import dev.duc.tlmse.database.entity.PermissionRoleEntity;
+import dev.duc.tlmse.repository.database.entity.PermissionRoleEntity;
 import org.mapstruct.*;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Mapper(
@@ -14,7 +13,17 @@ public interface PermissionRoleMapper {
     PermissionRoleEntity toEntity(PermissionRole permissionRole);
 
 
-    PermissionRole toDto(PermissionRoleEntity permissionRoleEntity);
+    default PermissionRole toDto(PermissionRoleEntity permissionRoleEntity) {
+        PermissionRole permissionRole = new PermissionRole(permissionRoleEntity.getRoleId(),
+                permissionRoleEntity.getServiceCode(), new HashMap<>());
+        Map<UUID, Map<String, Boolean>> permission = permissionRole.permission();
+
+        for (Map.Entry<String, Boolean> roleModule : permissionRoleEntity.getPermission().entrySet()) {
+            Map<String, Boolean> detailRole = permission.computeIfAbsent(permissionRoleEntity.getModuleCode(), k -> new HashMap<>());
+            detailRole.put(roleModule.getKey(), roleModule.getValue());
+        }
+        return permissionRole;
+    }
 
     List<PermissionRole> toDtos(List<PermissionRoleEntity> permissionRoleEntity);
 

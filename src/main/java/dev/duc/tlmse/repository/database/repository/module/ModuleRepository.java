@@ -1,6 +1,6 @@
-package dev.duc.tlmse.database.repository.module;
+package dev.duc.tlmse.repository.database.repository.module;
 
-import dev.duc.tlmse.database.entity.ModuleEntity;
+import dev.duc.tlmse.repository.database.entity.ModuleEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

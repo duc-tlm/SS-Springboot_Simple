@@ -6,7 +6,6 @@ springdoc:
   api-docs:
     enabled: true
 
-
 spring:
   datasource:
     username: postgres
@@ -16,4 +15,8 @@ spring:
   kafka:
     producer:
       value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
-
+  data:
+    redis:
+      host: localhost
+      port: 6380
+      database: 0

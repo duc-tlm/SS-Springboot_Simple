@@ -1,6 +1,6 @@
-package dev.duc.tlmse.database.repository.rolepermission;
+package dev.duc.tlmse.repository.database.repository.rolepermission;
 
-import dev.duc.tlmse.database.entity.PermissionRoleEntity;
+import dev.duc.tlmse.repository.database.entity.PermissionRoleEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
