@@ -1,6 +1,7 @@
 package dev.duc.tlmse.domain.rolepermission;
 
-import dev.duc.tlmse.repository.database.entity.PermissionRoleEntity;
+import dev.duc.tlmse.repository.database.permissions.PermissionRoleEntity;
+import dev.duc.tlmse.repository.redis.permissions.PermissionsEntity;
 import org.mapstruct.*;
 
 import java.util.*;
@@ -10,8 +11,15 @@ import java.util.stream.Collectors;
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
         componentModel = MappingConstants.ComponentModel.SPRING)
 public interface PermissionRoleMapper {
-    PermissionRoleEntity toEntity(PermissionRole permissionRole);
 
+
+    @Mapping(target = "id", expression = "java(permissions.getId())")
+    @Mapping(target = "module", expression = "java(permissions.getModuleCode())")
+    @Mapping(target = "permissions", expression = "java(permissions.getPermission())")
+    PermissionsEntity toCacheDtos(PermissionRoleEntity permissions);
+
+    List<PermissionRole> toDtos(List<PermissionRoleEntity> permissionRoleEntity);
+    List<PermissionsEntity> toCacheDtos(List<PermissionRoleEntity> permissions);
 
     default PermissionRole toDto(PermissionRoleEntity permissionRoleEntity) {
         PermissionRole permissionRole = new PermissionRole(permissionRoleEntity.getRoleId(),
@@ -19,14 +27,11 @@ public interface PermissionRoleMapper {
         Map<UUID, Map<String, Boolean>> permission = permissionRole.permission();
 
         for (Map.Entry<String, Boolean> roleModule : permissionRoleEntity.getPermission().entrySet()) {
-            Map<String, Boolean> detailRole = permission.computeIfAbsent(permissionRoleEntity.getModuleCode(), k -> new HashMap<>());
+            Map<String, Boolean> detailRole = permission.computeIfAbsent(permissionRoleEntity.getModuleCode(), (k) -> new HashMap<>());
             detailRole.put(roleModule.getKey(), roleModule.getValue());
         }
         return permissionRole;
     }
-
-    List<PermissionRole> toDtos(List<PermissionRoleEntity> permissionRoleEntity);
-
 
     default List<PermissionRoleResultDTO> toResponses(List<PermissionRole> res) {
         return res.stream().map(this::toResponse)
@@ -39,7 +44,5 @@ public interface PermissionRoleMapper {
                 .entrySet()
                 .stream().map(it -> new PermissionRoleResultDTO(it.getKey(), it.getValue()))
                 .collect(Collectors.toList());
-
     }
-
 }

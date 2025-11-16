@@ -1,6 +1,5 @@
-package dev.duc.tlmse.repository.database.repository.role;
+package dev.duc.tlmse.repository.database.role;
 
-import dev.duc.tlmse.repository.database.entity.RoleEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

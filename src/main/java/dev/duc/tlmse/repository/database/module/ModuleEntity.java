@@ -1,6 +1,6 @@
-package dev.duc.tlmse.repository.database.entity;
+package dev.duc.tlmse.repository.database.module;
 
-import dev.duc.tlmse.repository.database.entity.common.ModuleStatus;
+import dev.duc.tlmse.repository.database.common.ModuleStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

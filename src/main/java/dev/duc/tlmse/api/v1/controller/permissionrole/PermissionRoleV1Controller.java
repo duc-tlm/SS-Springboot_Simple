@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/permissionrole")
@@ -29,6 +30,11 @@ public class PermissionRoleV1Controller {
         List<PermissionRoleResultDTO> responses = this.permissionRoleMapper.toResponses(res);
 
         return ApiResponse.success("Success with data",responses);
+    }
+
+    @GetMapping("/search")
+    public ApiResponse<?> permissions(@RequestParam("role") UUID roleId) {
+        return ApiResponse.success("Success with data", permissionRoleUseCase.getDateFromCache(roleId));
     }
 
 

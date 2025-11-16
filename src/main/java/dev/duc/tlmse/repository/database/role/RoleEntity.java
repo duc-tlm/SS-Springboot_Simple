@@ -1,4 +1,4 @@
-package dev.duc.tlmse.repository.database.entity;
+package dev.duc.tlmse.repository.database.role;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -7,8 +7,8 @@ import lombok.experimental.Accessors;
 
 import java.util.UUID;
 
-@Accessors(chain = true)
 @Data
+@Accessors(chain = true)
 @Entity
 @Table(name = "roles")
 @RequiredArgsConstructor

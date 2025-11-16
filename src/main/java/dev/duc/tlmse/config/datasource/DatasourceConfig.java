@@ -41,7 +41,7 @@ import java.util.Map;
  */
 
 @Configuration
-@EnableJpaRepositories(basePackages = "dev.duc.tlmse.database.repository")
+@EnableJpaRepositories(basePackages = "dev.duc.tlmse.repository.database")
 @ConfigurationPropertiesScan
 public class DatasourceConfig {
 
@@ -98,7 +98,7 @@ public class DatasourceConfig {
             @Qualifier("routingDataSource") DataSource routingDataSource) {
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
         factoryBean.setDataSource(routingDataSource);
-        factoryBean.setPackagesToScan("dev.duc.tlmse.database.entity");
+        factoryBean.setPackagesToScan("dev.duc.tlmse.repository.database");
 
         factoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
 

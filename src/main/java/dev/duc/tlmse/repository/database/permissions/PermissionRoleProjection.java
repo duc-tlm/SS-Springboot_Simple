@@ -1,4 +1,4 @@
-package dev.duc.tlmse.repository.database.projection.permissionrole;
+package dev.duc.tlmse.repository.database.permissions;
 
 public interface PermissionRoleProjection {
     String getCode();

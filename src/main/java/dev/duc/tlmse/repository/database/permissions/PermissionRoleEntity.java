@@ -1,4 +1,4 @@
-package dev.duc.tlmse.repository.database.entity;
+package dev.duc.tlmse.repository.database.permissions;
 
 
 import jakarta.persistence.*;
